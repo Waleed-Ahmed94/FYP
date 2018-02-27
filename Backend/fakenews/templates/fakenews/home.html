@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE>
+
+<html>
+<head>
+<style>
+button {
+  background-color: #A075B9;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  margin-top: 20px;
+  opacity: 0.6;
+  transition: 0.3s;
+  display: inline-block;
+  text-decoration: none;
+  font-family:'amiko';
+  cursor: pointer;
+}
+
+button:hover {opacity: 1}
+</style>
+    <title>Fake News Detector</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'fakenews/js/js.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'fakenews/index.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Amiko' rel='stylesheet'>
+    </head>
+<body>
+    
+    <div id="wholeupper"><h1>Fake News Detector</h1>
+    <nav id="bar">
+        <li id="page1"><a href="#">Login</a></li>
+    <li id="page2"><a href="#">Analyze Site</a></li>
+    <li id="page3"><a href="#">Voting</a></li>
+
+    </nav>
+    </div>
+
+    <div id="login">
+
+        Username : <input type="text" name="username" method="post"><br>
+Password :  <input type="password" name="password" method="post">
+
+    </div>
+    <div id="Webpages">
+        <h2>Examine News Article</h2>
+        <form action="/classify" method="POST"> {% csrf_token %}
+        <h3>Please Enter Title of News Article Below</h3>
+        <input type="text"  name="title"><br>
+        <h3>Please Enter News Article Below</h3>
+        <input type="text"  name="article"><br>
+        <button type="submit">Analyze</button>
+            </form>
+
+    </div>
+    <div>
+    <h2 id="Voting">Voting </h2>
+    </div>
+        </body>
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
