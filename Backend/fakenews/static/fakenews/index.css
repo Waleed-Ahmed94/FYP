@@ -4,6 +4,7 @@ margin: 10px;
 font-family:'amiko';
 font-size: 40px;
     width: 500px;
+color: white
 
 
 }
@@ -19,11 +20,11 @@ font-size: 40px;
 
 }
 body{
-	background-color: #c2aed6;
+	background-color: #ffffff;
 }
 #wholeupper{
 
-background-color: #A075B9;
+background-color: #1DA1F2;
     margin: -10px;
     padding: 10px;
 }

@@ -50,6 +50,11 @@ Password :  <input type="password" name="password" method="post">
     </div>
     <div id="Webpages">
         <h2>Examine News Article</h2>
+        <form action="/classifyurl" method="POST">{% csrf_token %}
+            <h3>Please Enter Article URL</h3>
+            <input type="url" name="newsurl">
+            <button type="submit">Analyze</button>
+        </form>
         <form action="/classify" method="POST"> {% csrf_token %}
         <h3>Please Enter Title of News Article Below</h3>
         <input type="text"  name="title"><br>

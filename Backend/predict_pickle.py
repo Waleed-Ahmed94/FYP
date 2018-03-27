@@ -23,6 +23,10 @@ def classify(title="NAN",text="NAN"):
     # load the object from the file into var b
     b = pickle.load(fileObject)
     a=b.predict(result)
+    if a[0]==0:
+        a='Fake News'
+    else:
+        a='Authentic News'
     result = result.values
     #print(result[1])
     return a, result

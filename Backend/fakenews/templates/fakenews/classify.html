@@ -1,8 +1,52 @@
-<h1>HELLLO</h1>
-{{ result }}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fake News Detector</title>
+   <style type="text/css">
+   	h1{
+      margin: 10px;
+font-family:'amiko';
+font-size: 40px;
+width: 100%;
+height: 80px;
+background-color: #1DA1F2;
+color: #ffffff;
+margin-top: -10px;
+margin-left: -10px;
+padding-top: 10px;
+padding-left: 10px;
 
-{{ wordcount }}
-{{ titlecount }}
-{{ punccount }}
-{{ gunningfog }}
-{{ readability }}
+   	}
+   	body{
+	background-color: #ffffff;
+	font-family:'amiko';
+font-size: 25px;
+}
+
+
+#results h2{
+	font-size: 35px;
+}
+   </style>
+   <link href='https://fonts.googleapis.com/css?family=Amiko' rel='stylesheet'>
+</head>
+<body>
+<h1>Fake News Detector</h1>
+<div id="results">
+<h2>Result :</h2>
+{{ result }}
+<br>
+<h2>Summary</h2>
+<ul>
+<li> Word Count : {{ wordcount }}</li>
+<li> Title Count : {{ titlecount }}</li>
+<li> Punctuation Count : {{ punccount }}</li>
+<li> Gunning Fog : {{ gunningfog }}</li>
+<li> Readability Index : {{ readability }}</li>
+
+    <li>Title : {{ articletitle }} </li>
+    <li>Text: {{ articletext }} </li>
+</ul>
+</div>
+</body>
+</html>
