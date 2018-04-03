@@ -8,10 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login , logout
 from django import forms
 from .models import Url
-from .models import Vote
-
-from django.http import JsonResponse
-from django.core import serializers
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
@@ -52,13 +48,18 @@ def classify(request):
 def classify_url(request):
     if request.method=="POST":
         newsurl=request.POST['newsurl']
+        stored=Url.objects.filter(Url__exact=newsurl)
+        if stored:
+            stored=stored[0]
+            print("already processed")
+            return render(request, "fakenews/classify.html", {'articletitle': stored.Title, 'articletext': stored.Text, 'result': stored.Classification})
         article=Article(newsurl)
         article.download()
         article.parse()
         print(article.title)
         print(article.text)
         result, features = predict_pickle.classify(article.title, article.text)
-        u1 = Url(Url=newsurl,Title=article.title,Text=article.text,Classification=result)
+        u1 = Url(Url=newsurl,Title=article.title,Text=article.text,Classification=result,Voting=0)
         u1.save()
         return render(request, "fakenews/classify.html", {'articletitle': article.title, 'articletext': article.text,'result': result, 'wordcount': features[0][0], 'titlecount':features[0][1], 'punccount': features[0][2], 'gunningfog': features[0][4], 'readability':features[0][5]})
 def logout_view(request):
@@ -70,77 +71,4 @@ def register_view(request):
 
 def voting_view(request):
     urls = Url.objects.all()
-    votes = request.user.url_set.all()
-    print(votes)
-    for r in votes:
-        print(r.Url)
-    return render(request,"fakenews/voting.html",{'urls':urls,'votes':votes})
-
-def upvote(request):
-    id = request.GET.get('id')
-    u1 = Url.objects.get(pk=id)
-    cur_user= request.user.id
-    voted= Vote.objects.filter(url=u1,user=cur_user)
-    print(voted)
-    if voted:
-        if voted[0].Dislike==True:
-            u1.Dislikes-=1
-            u1.Likes+=1
-            u1.save()
-            if (u1.Dislikes + u1.Likes) > 0:
-                u1.Rating = u1.Likes / (u1.Dislikes + u1.Likes)
-                u1.save()
-                data = u1.Rating
-            else:
-                data = 0
-            voted[0].Dislike=False
-        voted[0].Like=True
-        voted[0].save()
-        data=u1.Rating
-        return JsonResponse(data, safe=False)
-
-    u1.Likes+=1
-    u1.save()
-    if (u1.Dislikes+u1.Likes) > 0:
-        u1.Rating = u1.Likes/(u1.Dislikes+u1.Likes)
-        u1.save()
-        data = u1.Rating
-    else:
-        data=0
-    v=Vote(url=u1,user=request.user,Like=True)
-    v.save()
-    return JsonResponse(data,safe=False)
-def downvote(request):
-    id = request.GET.get('id')
-    u1 = Url.objects.get(pk=id)
-    cur_user = request.user.id
-    voted = Vote.objects.filter(url=u1, user=cur_user)
-    print(voted)
-    if voted:
-        if voted[0].Like == True:
-            u1.Likes -= 1
-            u1.Dislikes += 1
-            u1.save()
-            if (u1.Dislikes + u1.Likes) > 0:
-                u1.Rating = u1.Likes / (u1.Dislikes + u1.Likes)
-                u1.save()
-                data = u1.Rating
-            else:
-                data = 0
-            voted[0].Like = False
-        voted[0].Dislike = True
-        voted[0].save()
-        data = u1.Rating
-        return JsonResponse(data, safe=False)
-
-    u1.Dislikes += 1
-    u1.save()
-    if (u1.Dislikes + u1.Likes) > 0:
-        u1.Rating = u1.Likes / (u1.Dislikes + u1.Likes)
-        u1.save()
-        data = u1.Rating
-    else:
-        data = 0
-    v = Vote(url=u1, user=request.user, Dislike=True)
-    v.save()
-    return JsonResponse(data, safe=False)
+    return render(request,"fakenews/voting.html",{'urls':urls})
